@@ -1,0 +1,12 @@
+.venv/
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd 
+env/
+code_classification_dataset/
+models/*.pkl
+.ipynb_checkpoints/
+.DS_Store 
