@@ -38,10 +38,20 @@ Modèle de classification capable d'entrainer (soit fusion/concat) les modèles 
 Les tags peuvent créer un gros problème de déséquilibre entre les classes. 
 
 ### 6. Evaluation : 
-Métrics utilisées préferable, les métriques de l'ensemble F1 raisonnable pour un problème de classification et pour un problème multi-label.
+Métrics utilisées préferable, les métriques de l'ensemble F1 raisonnable pour un problème de classification et pour un problème multi-label.PP
 
 
 ## Schéma pipeline : 
-Description ----> TF-IDF ----\
-                               ---> concat ---> LogisticRegression OVR
-Code ----------> TF-IDF ----/
+flowchart LR
+    A[Description] --> B[TF-IDF]
+    C[Code] --> D[TF-IDF]
+
+    B --> E[Concatenation]
+    D --> E
+
+    E --> F[Logistic Regression<br/>One-vs-Rest]
+
+
+## Commandes bash : 
+Se positionner sur la branche develop : 
+>python src/preprocessing
