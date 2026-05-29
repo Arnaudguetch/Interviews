@@ -6,7 +6,7 @@ TARGET_TAGS = {
     "math",
     "graphs",
     "strings",
-    "number",
+    "number theory",
     "trees",
     "geometry",
     "games",
@@ -34,7 +34,7 @@ def load_dataset(data_dir: str) -> pd.DataFrame:
 
             tags = sample.get("tags", [])
 
-            # Keep only target tags
+            
             filtered_tags = [tag for tag in tags if tag in TARGET_TAGS]
 
             data.append({
