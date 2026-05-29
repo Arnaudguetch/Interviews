@@ -42,6 +42,7 @@ Métrics utilisées préferable, les métriques de l'ensemble F1 raisonnable pou
 
 
 ## Schéma pipeline : 
+```mermaid
 flowchart LR
     A[Description] --> B[TF-IDF]
     C[Code] --> D[TF-IDF]
@@ -50,6 +51,7 @@ flowchart LR
     D --> E
 
     E --> F[Logistic Regression<br/>One-vs-Rest]
+```
 
 
 ## Commandes bash : 
