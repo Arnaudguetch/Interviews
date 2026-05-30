@@ -56,6 +56,8 @@ flowchart LR
 
 ## Commandes bash : 
 Se positionner sur la branche develop en local : 
->python src/preprocessing
->python src/features.py
->python src/model.py
+```bash
+python src/preprocessing
+python src/features.py
+python src/model.py
+```
