@@ -60,4 +60,20 @@ Se positionner sur la branche develop en local :
 python src/preprocessing
 python src/features.py
 python src/model.py
+
+================== UTILISATION FINALE ======================= : 
+
+Command Line Interface (CLI) sur terminal ou Vscode
+
+Entraînement : 
+- python cli.py train
+
+Evaluation : 
+- python cli.py evaluate
+
+Prédiction : 
+- python cli.py predict \
+  --description "Trouve le chemin le plus court dans graph" \
+  --code "def bfs(...)" \
+  --difficulty 1200
 ```
