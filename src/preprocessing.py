@@ -13,17 +13,17 @@ TARGET_TAGS = {
     "probabilities"
 }
 
+
 def load_dataset(data_dir: str) -> pd.DataFrame:
     """
-    Load all JSON files from dataset directory
-    and build a clean DataFrame.
+    Load all JSON files and build a clean DataFrame.
     """
 
     data = []
 
     for filename in os.listdir(data_dir):
 
-        if not filename.endswith(".json"):
+        if not filename.lower().endswith(".json"):
             continue
 
         file_path = os.path.join(data_dir, filename)
@@ -34,13 +34,25 @@ def load_dataset(data_dir: str) -> pd.DataFrame:
 
             tags = sample.get("tags", [])
 
-            
-            filtered_tags = [tag for tag in tags if tag in TARGET_TAGS]
+            filtered_tags = [
+                tag for tag in tags
+                if tag in TARGET_TAGS
+            ]
+
+            if not filtered_tags:
+                continue
+
+            description = sample.get("prob_desc_description", "")
+            code = sample.get("source_code", "")
+            difficulty = sample.get("difficulty", 0)
+
+            if not description and not code:
+                continue
 
             data.append({
-                "description": sample.get("prob_desc_description", ""),
-                "code": sample.get("source_code", ""),
-                "difficulty": sample.get("difficulty", 0),
+                "description": description,
+                "code": code,
+                "difficulty": difficulty,
                 "tags": filtered_tags
             })
 
@@ -48,6 +60,9 @@ def load_dataset(data_dir: str) -> pd.DataFrame:
             print(f"Erreur sur {file_path}: {e}")
 
     df = pd.DataFrame(data)
+
+    if df.empty:
+        raise ValueError("Dataset vide après preprocessing.")
 
     return df
 
@@ -58,14 +73,16 @@ def save_dataset(df: pd.DataFrame, output_dir: str) -> None:
 
     output_path = os.path.join(output_dir, "processed_dataset.csv")
 
-    # important: convertir les listes en string pour CSV
     df_to_save = df.copy()
-    df_to_save["tags"] = df_to_save["tags"].apply(lambda x: ",".join(x))
+
+    # important pour visualisation
+    df_to_save["tags"] = df_to_save["tags"].apply(
+        lambda x: ",".join(x)
+    )
 
     df_to_save.to_csv(output_path, index=False)
 
     print(f"Dataset sauvegardé à : {output_path}")
-
 
 if __name__ == "__main__":
 
