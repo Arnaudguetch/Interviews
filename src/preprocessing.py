@@ -87,7 +87,7 @@ def save_dataset(df: pd.DataFrame, output_dir: str) -> None:
 if __name__ == "__main__":
 
     DATA_DIR = "code_classification_dataset"
-    OUTPUT_DIR = "data"
+    OUTPUT_DIR = "data/processed"
 
     df = load_dataset(DATA_DIR)
 
