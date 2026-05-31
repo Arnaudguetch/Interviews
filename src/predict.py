@@ -3,6 +3,14 @@ import pandas as pd
 
 from features import transform_features
 
+from config import (
+    MODEL_LGR_PATH,
+    MODEL_SVC_PATH,
+    MLB_PATH,
+    DESC_VECTORIZER_PATH,
+    CODE_VECTORIZER_PATH
+)
+
 
 def predict(
     description: str,
@@ -13,17 +21,17 @@ def predict(
     Predict tags using Logistic Regression and Linear SVC.
     """
 
-    model_lgr = joblib.load("models/model_lgr.pkl")
-    model_svc = joblib.load("models/model_svc.pkl")
+    model_lgr = joblib.load(MODEL_LGR_PATH)
+    model_svc = joblib.load(MODEL_SVC_PATH)
 
-    provider = joblib.load("models/provider.pkl")
+    provider = joblib.load(MLB_PATH)
 
     desc_vectorizer = joblib.load(
-        "models/desc_vectorizer.pkl"
+        DESC_VECTORIZER_PATH
     )
 
     code_vectorizer = joblib.load(
-        "models/code_vectorizer.pkl"
+        CODE_VECTORIZER_PATH
     )
 
     df = pd.DataFrame([
@@ -39,6 +47,16 @@ def predict(
         desc_vectorizer,
         code_vectorizer
     )
+    
+    probas = model_lgr.predict_proba(X)[0]
+    
+    scores = {
+        tag: round(score, 3)
+        for tag, score in zip(
+            provider.classes_,
+            probas
+        )
+    }
 
     y_pred_lgr = model_lgr.predict(X)
     y_pred_svc = model_svc.predict(X)
@@ -53,15 +71,17 @@ def predict(
 
     return {
         "logistic_regression": tags_lgr,
-        "linear_svc": tags_svc
+        "linear_svc": tags_svc,
+        "scores": scores
     }
+    
     
 if __name__ == "__main__":
 
     result = predict(
         description="Trouve le chemin le plus court dans un graphe.",
         code="vector<int> adj[n];",
-        difficulty=3
+        difficulty=1200
     )
 
     print(result)

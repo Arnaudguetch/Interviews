@@ -7,6 +7,11 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from features import build_features 
 from model import build_model_lgr, build_model_svc 
 
+from config import (
+    TRAIN_DATASET_PATH,
+    MODELS_DIR
+)
+
 RANDOM_STATE = 42 
 TEST_SIZE = 0.2
 
@@ -37,7 +42,7 @@ def save_artifacts(
     provider,
     desc_vectorizer,
     code_vectorizer,
-    output_dir="models"
+    output_dir=MODELS_DIR
 ):
 
     os.makedirs(output_dir, exist_ok=True)
@@ -67,7 +72,7 @@ def train():
     
     print("Loading dataset...")
     
-    df = load_dataset("data/processed/train_dataset.csv") 
+    df = load_dataset(TRAIN_DATASET_PATH) 
     
     y, provider = prepare_labels(df)
     

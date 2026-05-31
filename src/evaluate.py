@@ -8,9 +8,18 @@ from sklearn.metrics import (
 
 from features import transform_features 
 
+from config import (
+    TEST_DATASET_PATH,
+    MODEL_LGR_PATH,
+    MODEL_SVC_PATH,
+    MLB_PATH,
+    DESC_VECTORIZER_PATH,
+    CODE_VECTORIZER_PATH
+)
+
 
 def load_test_dataset(
-    data_path="data/processed/test.csv") -> pd.DataFrame:
+    data_path=TEST_DATASET_PATH) -> pd.DataFrame:
     
     df = pd.read_csv(data_path)
     df["tags"] = df["tags"].str.split(",")
@@ -80,17 +89,17 @@ def evaluate():
     
     print("Loading models...")
     
-    model_lgr = joblib.load("models/model_lgr.pkl")
-    model_svc = joblib.load("models/model_svc.pkl")
+    model_lgr = joblib.load(MODEL_LGR_PATH)
+    model_svc = joblib.load(MODEL_SVC_PATH)
     
-    provider = joblib.load("models/provider.pkl")
+    provider = joblib.load(MLB_PATH)
     
     desc_vectorizer = joblib.load(
-        "models/desc_vectorizer.pkl"
+        DESC_VECTORIZER_PATH
     )
     
     code_vectorizer = joblib.load(
-        "models/code_vectorizer.pkl"
+        CODE_VECTORIZER_PATH
     )
     
     print("Loading test dataset...")
