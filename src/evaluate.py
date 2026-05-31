@@ -74,6 +74,10 @@ def print_metrics(
     
     report_df = pd.DataFrame(report).T 
     
+    report_df = report_df.loc[
+        provider.classes_
+    ]
+    
     print()
     print("Tags les mieux prédits (triés par F1-score)")
     

@@ -22,7 +22,7 @@ def main():
 
     subparsers.add_parser(
         "evaluate", 
-        help="Évalue les modèles sur le test set"
+        help="Évalue les modèles sur le test dataset"
     )
 
     predict_parser = subparsers.add_parser(
@@ -50,28 +50,45 @@ def main():
     args = parser.parse_args()
 
     if args.command == "train":
+        print("=== Training Models ===")
         train()
+        
     elif args.command == "evaluate":
+        print("=== Evaluating Models ===")
         evaluate()
+        
     elif args.command == "predict":
-        tags = predict(
+        print("=== Making Predictions ===")
+        result = predict(
             description=args.description,
             code=args.code,
             difficulty=args.difficulty
         )
         
         print()
-        print("=== Predictions ===")
-
+        print("=" * 60)
+        print("PREDICTION RESULTS")
+        print("=" * 60)
+        
+        print()
         print(
             "Logistic Regression:",
-            tags["logistic_regression"]
+            result["logistic_regression"]
         )
 
+        print()
         print(
             "Linear SVC:",
-            tags["linear_svc"]
+            result["linear_svc"]
         )
+        
+        print()
+        print("Confidence Scores (Logistic Regression):")
+
+        for tag, score in result["scores"].items():
+            print(
+                f"{tag:<15} {score:.3f}"
+            )
 
 if __name__ == "__main__":
     main()
