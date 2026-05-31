@@ -1,16 +1,26 @@
 import os 
 import joblib
+import pandas as pd 
 
-
-from sklearn.model_selection import train_test_split 
 from sklearn.preprocessing import MultiLabelBinarizer 
 
-from preprocessing import load_dataset 
 from features import build_features 
 from model import build_model_lgr, build_model_svc 
 
 RANDOM_STATE = 42 
+TEST_SIZE = 0.2
 
+
+def load_dataset(data_path: str) -> pd.DataFrame:
+    """
+    Load processed dataset from CSV file.
+    """
+
+    df = pd.read_csv(data_path)
+    
+    df["tags"] = df["tags"].str.split(",")
+
+    return df
 
 
 def prepare_labels(df): 
@@ -32,35 +42,44 @@ def save_artifacts(
 
     os.makedirs(output_dir, exist_ok=True)
 
-    joblib.dump(model_lgr, f"{output_dir}/model_lgr.pkl")
-    joblib.dump(model_svc, f"{output_dir}/model_svc.pkl")
+    joblib.dump( model_lgr,
+                os.path.join(output_dir, "model_lgr.pkl") 
+    )
+    joblib.dump(model_svc, 
+                os.path.join(output_dir, "model_svc.pkl") 
+    )
 
-    joblib.dump(provider, f"{output_dir}/provider.pkl")
-    joblib.dump(desc_vectorizer, f"{output_dir}/desc_vectorizer.pkl")
-    joblib.dump(code_vectorizer, f"{output_dir}/code_vectorizer.pkl") 
+    joblib.dump(provider, 
+                os.path.join(output_dir, "provider.pkl") 
+    )
+    
+    joblib.dump(desc_vectorizer, 
+                os.path.join(output_dir, "desc_vectorizer.pkl") 
+    )
+    joblib.dump(code_vectorizer, 
+                os.path.join(output_dir, "code_vectorizer.pkl") 
+    ) 
+    
+    print(f"Artifacts saved in {output_dir}")
     
     
-if __name__ == "__main__": 
+def train():
     
-    df = load_dataset("data/raw") 
+    print("Loading dataset...")
+    
+    df = load_dataset("data/processed/train_dataset.csv") 
     
     y, provider = prepare_labels(df)
     
     X, desc_vectorizer, code_vectorizer = build_features(df)
     
-    X_train, X_test, y_train, y_test = train_test_split(
-        X,
-        y,
-        test_size=0.2,
-        random_state=RANDOM_STATE
-    )
-    
-    
+    print("Training Logistic Regression...")
     model_lgr = build_model_lgr()
-    model_lgr.fit(X_train, y_train)
+    model_lgr.fit(X, y)
     
+    print("Training Linear SVC...")
     model_svc = build_model_svc()
-    model_svc.fit(X_train, y_train)
+    model_svc.fit(X, y)
     
     save_artifacts(
         model_lgr,
@@ -71,3 +90,6 @@ if __name__ == "__main__":
     )
     
     print("Training completed.")
+    
+if __name__ == "__main__": 
+    train()
