@@ -23,7 +23,8 @@ def build_model_svc():
 
     base_model = LinearSVC(
         class_weight="balanced",
-        random_state=RANDOM_STATE
+        random_state=RANDOM_STATE,
+        max_iter=10000
     )
 
     model_svc = OneVsRestClassifier(base_model)

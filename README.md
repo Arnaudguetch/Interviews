@@ -66,14 +66,19 @@ python src/model.py
 Command Line Interface (CLI) sur terminal ou Vscode
 
 Entraînement : 
-- python cli.py train
+- python src/cli.py train
 
 Evaluation : 
-- python cli.py evaluate
+- python src/cli.py evaluate
 
 Prédiction : 
-- python cli.py predict \
-  --description "Trouve le chemin le plus court dans graph" \
-  --code "def bfs(...)" \
-  --difficulty 1200
+- python src/cli.py predict \
+    --description "Find the shortest path between two nodes in a graph." \
+    --code "vector<int> adj[n];" \
+    --difficulty 1200
+
 ```
+
+## Gestion de Projet : 
+
+Pour réaliser le projet dans son entiereté, j'ai décidé de l'éxécuté selon la méthode de gestion de projet repartis sur les tâches et le temps.
